@@ -1,5 +1,4 @@
 
-require "pry"
 
 
 class BoardCase
@@ -8,17 +7,6 @@ class BoardCase
   def initialize(symbol =" ")
     @case_value = symbol
   end
-
-
-  def to_s
-
-  end
-
-
-  def play
-    #TO DO : une méthode qui change la BoardCase jouée en fonction de la valeur du joueur (X, ou O)
-  end
-
 end
 
 
@@ -37,7 +25,6 @@ class Board
     @board.each{ |casebord|  liste.push(casebord.case_value)}
 
     "   1 2 3\n   - - -\nA |%s|%s|%s|\nB |%s|%s|%s|\nC |%s|%s|%s|\n   - - -\n" % liste
-    #" 1, 2, 3\n "+"="*8+"\n"+"%s, %s, %s\n "*3 % liste
 
   end
 
@@ -157,9 +144,9 @@ class Game
   end
 
 
-
+  #determine la fin de la partie
   def game_over(player)
-    #les différente combinaisons gagnantes
+    #les différentes combinaisons gagnantes
     vic_combi = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
     vic_combi.each do |victorious_case|
       #verifie si les les pions du joeurs sont dans les cases des combinaisons gagnates
