@@ -30,22 +30,12 @@ class Board
 
   #place "symbole" dans l'emlpacement 'place'
   def put_on_bord(symbol, place)
-    place.split('')
-    index = 0
-    add =0
-    if place[0] == 'B'
-      add = 3
-    elsif place[0] == 'C'
-      add= 6
-    else
-      add= 0
-    end
-    index = place[1].to_i-1+ add
+    #on recupère l'index de la position jouée
+    index=["A1","A2","A3","B1","B2","B3","C1","C2","C3"].index(place)
+    #met "symbole" dans la position "index" (modification du  "BoardCase.symbol" de cette position)
     @board[index].case_value = symbol
   end
-
 end
-
 
 
 
@@ -58,7 +48,6 @@ class Player
     @name = name
     @symbol = symbol
   end
-
 end
 
 class Game
@@ -68,6 +57,7 @@ class Game
     #les coups possibles à jouer
     @possibilities = ["A1","A2","A3","B1","B2","B3","C1","C2","C3"]
   end
+
 
   def go
     #determine qui doit jouer
@@ -87,7 +77,7 @@ class Game
 
     puts "#{name_1}, choisissez votre symbole (O/X)"
     symbol_1 = gets.chomp.capitalize
-    #boucle pour symboles valides
+    #boucle infinie tant qu'il n'y a pas de coups valides
     while not ["X", "O"].include?(symbol_1)
       puts "choisissez un symbole entre X et O"
       symbol_1 = gets.chomp.capitalize
@@ -116,13 +106,13 @@ class Game
       puts "================================================"
     else
       puts "======================================="
-      puts "  Pas de gagnant, match nul"
+      puts "  Pas de gagnant, match nul!"
       puts "======================================="
     end
 
   end
 
-
+  #A chaque tour ...
   def turn(number)
     player = [@player_1, @player_2][number]
 
@@ -133,12 +123,14 @@ class Game
 
       puts " #{player.name} entrez une case valide! "
       puts @possibilities
+      #retour à la ligne 
+      puts
       played = gets.chomp.upcase
     end
     @board.put_on_bord(player.symbol,played)
     @possibilities.delete(played)
     puts @board
-    ##retourne un gagnant s'il en a, sinon retourne false
+    #retourne un gagnant s'il en a, sinon retourne false
     return game_over(player)
   end
 
@@ -148,7 +140,7 @@ class Game
     #les différentes combinaisons gagnantes
     vic_combi = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
     vic_combi.each do |victorious_case|
-      #verifie si les les pions du joeurs sont dans les cases des combinaisons gagnates
+      #verifie si les les pions du joeurs sont dans les cases de cette combinaison gagnante
       if @board.board[victorious_case[0]].case_value+ @board.board[victorious_case[1]].case_value+ @board.board[victorious_case[2]].case_value == player.symbol*3
         #retourne le joeur s'il a gagné
         return player
