@@ -22,7 +22,7 @@ class Board
     liste = []
     @board.each{ |casebord|  liste.push(casebord.case_value)}
     #formatage pour l'affichage.
-    #les %s sont remplacé par les élements de liste
+    #les %s sont remplacés par les élements de "liste"
     #agrandir l'écran pour voir la chaine de carractère complète
     "    1   2   3\n  -------------\nA | %s | %s | %s |\n  -------------\nB | %s | %s | %s |\n  -------------\nC | %s | %s | %s |\n  -------------\n" % liste
 
@@ -70,9 +70,9 @@ class Game
   end
 
   def go
-    #nombre total de tours joués
-    turn_number = 1
     #determine qui doit jouer
+    #0 : joeur_1; 1: joeur2
+    total_turn = 0
     who_plays = 0
     #contient le gagnant, retourne false si y'a pas de gagnant
     winner = false
@@ -103,16 +103,17 @@ class Game
     #tant qu'il n'y'a pas de gagnant
     #et qu'il y'a des possibilités de jeux
     while not (winner or @possibilities.length == 0)
-      #récupère en même temps le coup joué
+      #récupère un gagnant s'il en a, sinon recupère false
       winner = turn(who_plays)
-      turn_number+=1
+      #modifaction pour passé au joueur suivant
       who_plays = (1-who_plays)
+      total_turn+=1
 
     end
     if winner
-      puts "======================================="
-      puts " Bravo #{winner.name}, vous avez gagné! "
-      puts "======================================="
+      puts "================================================"
+      puts " Bravo #{winner.name}, vous avez gagné après #{total_turn} tours! "
+      puts "================================================"
     else
       puts "======================================="
       puts "  Pas de gagnant, match nul"
@@ -123,11 +124,11 @@ class Game
 
 
   def turn(number)
-    #TO DO : affiche le plateau, demande au joueur il joue quoi, vérifie si un joueur a gagné, passe au joueur suivant si la partie n'est pas finie
     player = [@player_1, @player_2][number]
 
     puts " #{player.name} à vous de jouer! "
     played = gets.chomp.upcase
+    #tant que le joueur ne choisit pas une case valide
     while not @possibilities.include?(played)
 
       puts " #{player.name} entrez une case valide! "
@@ -137,7 +138,7 @@ class Game
     @board.put_on_bord(player.symbol,played)
     @possibilities.delete(played)
     puts @board
-    #retourne le coup joué
+    ##retourne un gagnant s'il en a, sinon retourne false
     return game_over(player)
   end
 
@@ -152,9 +153,8 @@ class Game
         #retourne le joeur s'il a gagné
         return player
       end
-      #on retourne false si le joueur n'a pas gagné
-
     end
+    #on retourne false si le joueur n'a pas gagné
     return false
   end
 
