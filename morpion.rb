@@ -10,8 +10,6 @@ class BoardCase
 end
 
 
-
-
 class Board
   attr_accessor :board
   def initialize()
@@ -23,8 +21,10 @@ class Board
   def to_s
     liste = []
     @board.each{ |casebord|  liste.push(casebord.case_value)}
-
-    "   1 2 3\n   - - -\nA |%s|%s|%s|\nB |%s|%s|%s|\nC |%s|%s|%s|\n   - - -\n" % liste
+    #formatage pour l'affichage.
+    #les %s sont remplacé par les élements de liste
+    #agrandir l'écran pour voir la chaine de carractère complète
+    "    1   2   3\n  -------------\nA | %s | %s | %s |\n  -------------\nB | %s | %s | %s |\n  -------------\nC | %s | %s | %s |\n  -------------\n" % liste
 
   end
 
@@ -56,7 +56,6 @@ class Player
 
   def initialize(name, symbol)
     @name = name
-    @victorious = false
     @symbol = symbol
   end
 
@@ -65,14 +64,12 @@ end
 class Game
   attr_accessor :player_1, :player_2, :board, :possibilities
   def initialize()
-    #TO DO : créé 2 joueurs, créé un board
     @board = Board.new()
     #les coups possibles à jouer
     @possibilities = ["A1","A2","A3","B1","B2","B3","C1","C2","C3"]
   end
 
   def go
-    # TO DO : lance la partie
     #nombre total de tours joués
     turn_number = 1
     #determine qui doit jouer
@@ -90,6 +87,7 @@ class Game
 
     puts "#{name_1}, choisissez votre symbole (O/X)"
     symbol_1 = gets.chomp.capitalize
+    #boucle pour symboles valides
     while not ["X", "O"].include?(symbol_1)
       puts "choisissez un symbole entre X et O"
       symbol_1 = gets.chomp.capitalize
@@ -101,10 +99,10 @@ class Game
     @player_1 = Player.new(name_1,symbol_1)
     @player_2 = Player.new(name_2, symbol_2)
 
+    puts @board
     #tant qu'il n'y'a pas de gagnant
     #et qu'il y'a des possibilités de jeux
-    puts @board
-    while not winner && @possibilities.length > 0
+    while not (winner or @possibilities.length == 0)
       #récupère en même temps le coup joué
       winner = turn(who_plays)
       turn_number+=1
