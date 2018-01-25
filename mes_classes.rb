@@ -36,7 +36,8 @@ class Board
     liste = []
     @board.each{ |casebord|  liste.push(casebord.case_value)}
 
-     " 1, 2, 3\n "+"="*8+"\n"+"%s, %s, %s\n "*3 % liste
+    "   1 2 3\n   - - -\nA |%s|%s|%s|\nB |%s|%s|%s|\nC |%s|%s|%s|\n   - - -\n" % liste
+    #" 1, 2, 3\n "+"="*8+"\n"+"%s, %s, %s\n "*3 % liste
 
   end
 
@@ -93,13 +94,14 @@ class Game
     winner = false
 
     symbols = ["X", "O"]
+    puts "===============Tic Tac Toe============="
     puts "Joueur 1, entrez votre nom"
     name_1 = gets.chomp
     puts "Joueur 2, entrez votre nom"
     name_2 = gets.chomp
 
 
-    puts "Joueur 1, choisissez votre symbole (O/X)"
+    puts "#{name_1}, choisissez votre symbole (O/X)"
     symbol_1 = gets.chomp.capitalize
     while not ["X", "O"].include?(symbol_1)
       puts "choisissez un symbole entre X et O"
@@ -114,6 +116,7 @@ class Game
 
     #tant qu'il n'y'a pas de gagnant
     #et qu'il y'a des possibilités de jeux
+    puts @board
     while not winner && @possibilities.length > 0
       #récupère en même temps le coup joué
       winner = turn(who_plays)
@@ -122,9 +125,13 @@ class Game
 
     end
     if winner
-      puts "Bravo voud avez gagné #{winner.name}"
+      puts "======================================="
+      puts " Bravo #{winner.name}, vous avez gagné! "
+      puts "======================================="
     else
-      puts "Pas de gagnant, match nul"
+      puts "======================================="
+      puts "  Pas de gagnant, match nul"
+      puts "======================================="
     end
 
   end
@@ -133,10 +140,11 @@ class Game
   def turn(number)
     #TO DO : affiche le plateau, demande au joueur il joue quoi, vérifie si un joueur a gagné, passe au joueur suivant si la partie n'est pas finie
     player = [@player_1, @player_2][number]
-    puts @board
+
     puts " #{player.name} à vous de jouer! "
     played = gets.chomp.upcase
     while not @possibilities.include?(played)
+
       puts " #{player.name} entrez une case valide! "
       puts @possibilities
       played = gets.chomp.upcase
